@@ -8,7 +8,7 @@ const axios = require('axios');
 // Valid keys - Add your keys here
 // You can also use environment variables: process.env.VALID_KEYS
 const VALID_KEYS = [
-  'a7@Z_2!',           // Default key
+  'Team',           // Default key
   'DEMO_KEY_2026',
   'DARKDEV-PRO-001',
   'TG2NUM-FREE-2026'
