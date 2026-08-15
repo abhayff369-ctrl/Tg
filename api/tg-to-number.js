@@ -1,31 +1,26 @@
 // api/tg-to-number.js
 // Developer: Darkdeveloper02
-// Telegram ID to Phone Number API with Key System
+// Telegram ID to Phone Number API with Key System (Clean Response)
 
 const axios = require('axios');
 
 // ==================== CONFIGURATION ====================
-// Valid keys - Add your keys here
-// You can also use environment variables: process.env.VALID_KEYS
 const VALID_KEYS = [
-  'Team',           // Default key
+  'a7@Z_2!',
   'DEMO_KEY_2026',
   'DARKDEV-PRO-001',
   'TG2NUM-FREE-2026'
 ];
 
-// Rate limiting (requests per minute per key)
 const RATE_LIMIT = {
-  windowMs: 60000,      // 1 minute
-  maxRequests: 30,      // 30 requests per minute
+  windowMs: 60000,
+  maxRequests: 30,
 };
 
-// Request tracking for rate limiting
 const requestLog = {};
 
 // ==================== MAIN HANDLER ====================
 module.exports = async (req, res) => {
-  // Enable CORS
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
@@ -34,10 +29,9 @@ module.exports = async (req, res) => {
     return res.status(200).end();
   }
 
-  // ========== 1. GET PARAMETERS ==========
   const { key, userid, username } = req.query;
 
-  // ========== 2. VALIDATE KEY ==========
+  // ---------- Validate Key ----------
   if (!key) {
     return res.status(401).json({
       status: false,
@@ -46,7 +40,6 @@ module.exports = async (req, res) => {
     });
   }
 
-  // Check if key is valid
   const validKeys = process.env.VALID_KEYS 
     ? process.env.VALID_KEYS.split(',') 
     : VALID_KEYS;
@@ -59,33 +52,22 @@ module.exports = async (req, res) => {
     });
   }
 
-  // ========== 3. RATE LIMITING ==========
+  // ---------- Rate Limiting ----------
   const now = Date.now();
-  if (!requestLog[key]) {
-    requestLog[key] = [];
-  }
-
-  // Clean old requests
-  requestLog[key] = requestLog[key].filter(
-    timestamp => now - timestamp < RATE_LIMIT.windowMs
-  );
+  if (!requestLog[key]) requestLog[key] = [];
+  requestLog[key] = requestLog[key].filter(t => now - t < RATE_LIMIT.windowMs);
 
   if (requestLog[key].length >= RATE_LIMIT.maxRequests) {
     return res.status(429).json({
       status: false,
-      error: 'Rate limit exceeded. Max 30 requests per minute per key.',
-      developer: 'Darkdeveloper02',
-      remaining: 0,
-      resetIn: Math.ceil((RATE_LIMIT.windowMs - (now - requestLog[key][0])) / 1000)
+      error: 'Rate limit exceeded. Max 30 requests per minute.',
+      developer: 'Darkdeveloper02'
     });
   }
-
-  // Log this request
   requestLog[key].push(now);
 
-  // ========== 4. VALIDATE INPUT ==========
+  // ---------- Validate Input ----------
   const targetId = userid || username;
-
   if (!targetId) {
     return res.status(400).json({
       status: false,
@@ -102,12 +84,52 @@ module.exports = async (req, res) => {
     });
   }
 
-  // ========== 5. FETCH DATA FROM SOURCE ==========
+  // ---------- Fetch Data ----------
   try {
-    // Build the target URL (using the original API as source)
     const sourceUrl = `https://tg2num-coral.vercel.app/tg-to-number?key=a7@Z_2!&userid=${targetId}`;
-
     const response = await axios.get(sourceUrl, {
+      timeout: 15000,
+      headers: { 'User-Agent': 'Mozilla/5.0 (compatible; TG2Num-Clone/1.0)' }
+    });
+
+    const data = response.data;
+
+    if (data.status === true && data.data) {
+      // ✅ CLEAN RESPONSE — Only essential fields
+      return res.status(200).json({
+        status: true,
+        data: {
+          source1: data.data.source1 || null
+        },
+        target_id: targetId,
+        target_type: userid ? 'user_id' : 'username',
+        developer: 'Darkdeveloper02'
+      });
+    } else {
+      return res.status(404).json({
+        status: false,
+        error: 'No data found for the provided Telegram ID/Username.',
+        developer: 'Darkdeveloper02',
+        target_id: targetId
+      });
+    }
+
+  } catch (error) {
+    console.error('Error fetching data:', error.message);
+    if (error.response) {
+      return res.status(error.response.status || 500).json({
+        status: false,
+        error: 'Source API error: ' + (error.response.data?.error || 'Unknown error'),
+        developer: 'Darkdeveloper02'
+      });
+    }
+    return res.status(500).json({
+      status: false,
+      error: 'Internal server error. Please try again later.',
+      developer: 'Darkdeveloper02'
+    });
+  }
+};    const response = await axios.get(sourceUrl, {
       timeout: 15000,
       headers: {
         'User-Agent': 'Mozilla/5.0 (compatible; TG2Num-Clone/1.0)'
