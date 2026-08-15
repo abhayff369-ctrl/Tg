@@ -14,21 +14,21 @@
       "key": "DEMO_KEY_2026",
       "owner": "Public",
       "created": "2026-08-15",
-      "expires": "2026-09-15",
+      "expires": "2026-08-16",
       "status": "active",
       "plan": "demo",
       "requests_used": 0,
-      "rate_limit": 10
+      "rate_limit": 100000
     },
     {
       "key": "DARKDEV-PRO-001",
       "owner": "Premium User",
       "created": "2026-08-15",
-      "expires": "2027-08-15",
+      "expires": "2026-08-16",
       "status": "active",
       "plan": "pro",
       "requests_used": 0,
-      "rate_limit": 100
+      "rate_limit": 10000
     }
   ]
 }
