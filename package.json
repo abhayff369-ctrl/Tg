@@ -1,0 +1,14 @@
+{
+  "name": "tg2num-clone",
+  "version": "1.0.0",
+  "description": "Telegram ID to Phone Number API with Key System",
+  "main": "api/tg-to-number.js",
+  "scripts": {
+    "start": "node api/tg-to-number.js"
+  },
+  "dependencies": {
+    "axios": "^1.6.0"
+  },
+  "author": "Darkdeveloper02",
+  "license": "MIT"
+}
