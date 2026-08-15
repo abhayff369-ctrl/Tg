@@ -1,0 +1,22 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "api/**/*.js",
+      "use": "@vercel/node"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/tg-to-number",
+      "dest": "/api/tg-to-number.js"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/api/tg-to-number.js"
+    }
+  ],
+  "env": {
+    "VALID_KEYS": "a7@Z_2!,DEMO_KEY_2026,DARKDEV-PRO-001"
+  }
+}
