@@ -1,0 +1,34 @@
+{
+  "keys": [
+    {
+      "key": "Team",
+      "owner": "Darkdeveloper02",
+      "created": "2026-08-15",
+      "expires": "2026-08-16",
+      "status": "active",
+      "plan": "premium",
+      "requests_used": 0,
+      "rate_limit": 9999
+    },
+    {
+      "key": "DEMO_KEY_2026",
+      "owner": "Public",
+      "created": "2026-08-15",
+      "expires": "2026-09-15",
+      "status": "active",
+      "plan": "demo",
+      "requests_used": 0,
+      "rate_limit": 10
+    },
+    {
+      "key": "DARKDEV-PRO-001",
+      "owner": "Premium User",
+      "created": "2026-08-15",
+      "expires": "2027-08-15",
+      "status": "active",
+      "plan": "pro",
+      "requests_used": 0,
+      "rate_limit": 100
+    }
+  ]
+}
